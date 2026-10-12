@@ -1,0 +1,68 @@
+[
+  {
+    "department_id": "D00",
+    "department_name": "Executive Office",
+    "cost_center": "CC-000",
+    "description": "Leadership & strategy"
+  },
+  {
+    "department_id": "D01",
+    "department_name": "Engineering",
+    "cost_center": "CC-100",
+    "description": "Product engineering, QA and DevOps"
+  },
+  {
+    "department_id": "D02",
+    "department_name": "Product & Design",
+    "cost_center": "CC-200",
+    "description": "Product management and UX design"
+  },
+  {
+    "department_id": "D03",
+    "department_name": "Data & AI",
+    "cost_center": "CC-300",
+    "description": "Data engineering, analytics and machine learning"
+  },
+  {
+    "department_id": "D04",
+    "department_name": "Sales",
+    "cost_center": "CC-400",
+    "description": "Enterprise and mid-market sales"
+  },
+  {
+    "department_id": "D05",
+    "department_name": "Marketing",
+    "cost_center": "CC-500",
+    "description": "Brand, content and digital marketing"
+  },
+  {
+    "department_id": "D06",
+    "department_name": "Customer Support",
+    "cost_center": "CC-600",
+    "description": "Customer success and support desk"
+  },
+  {
+    "department_id": "D07",
+    "department_name": "Human Resources",
+    "cost_center": "CC-700",
+    "description": "Talent, people operations and payroll"
+  },
+  {
+    "department_id": "D08",
+    "department_name": "Finance & Accounts",
+    "cost_center": "CC-800",
+    "description": "Accounting, controls and reporting"
+  },
+  {
+    "department_id": "D09",
+    "department_name": "Operations & IT",
+    "cost_center": "CC-900",
+    "description": "Facilities, IT systems and operations"
+  },
+  {
+    "department_id": "D10",
+    "department_name": "Legal & Compliance",
+    "cost_center": "CC-950",
+    "description": "Contracts, policy and statutory compliance"
+  }
+]
