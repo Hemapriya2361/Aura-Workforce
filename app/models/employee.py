@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from sqlalchemy import (
-    Boolean, Date, DateTime, ForeignKey, Integer, Numeric, String, func,
+    Boolean, CheckConstraint, Date, DateTime, ForeignKey, Integer, Numeric, String, func,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -10,6 +10,13 @@ from app.models.base import Base
 
 class Employee(Base):
     __tablename__ = "employees"
+
+    __table_args__ = (
+    CheckConstraint(
+        "exit_date IS NULL OR exit_date >= hire_date",
+        name="ck_employees_exit_date_after_hire_date",
+    ),
+)
 
     employee_id: Mapped[str] = mapped_column(String(10), primary_key=True)
     first_name: Mapped[str] = mapped_column(String(80))
@@ -20,7 +27,7 @@ class Employee(Base):
     date_of_birth: Mapped[date] = mapped_column(Date)
     hire_date: Mapped[date] = mapped_column(Date)
     exit_date: Mapped[date | None] = mapped_column(Date)
-    employment_status: Mapped[str] = mapped_column(String(30), default="Active")
+    employment_status: Mapped[str] = mapped_column(String(30), default="Active", index=True)
     employment_type: Mapped[str] = mapped_column(String(30), default="Permanent")
     department_id: Mapped[str] = mapped_column(
         ForeignKey("departments.department_id"), index=True
