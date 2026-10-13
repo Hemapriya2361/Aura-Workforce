@@ -1,0 +1,56 @@
+Table departments {
+  department_id varchar(10) [pk]
+  department_name varchar(100) [unique, not null]
+  cost_center varchar(20) [not null]
+  description varchar(255) [not null]
+}
+
+Table roles {
+  role_id varchar(10) [pk]
+  department_id varchar(10) [not null]
+  role_title varchar(120) [not null]
+  level int [not null]
+  grade varchar(60) [not null]
+  band_min_annual numeric(12,2) [not null]
+  band_mid_annual numeric(12,2) [not null]
+  band_max_annual numeric(12,2) [not null]
+  overtime_eligible varchar(1) [not null]
+  band_year int [not null]
+}
+
+Table employees {
+  employee_id varchar(10) [pk]
+  first_name varchar(80) [not null]
+  last_name varchar(80) [not null]
+  full_name varchar(160) [not null]
+  work_email varchar(200) [unique, not null]
+  gender varchar(10) [not null]
+  date_of_birth date [not null]
+  hire_date date [not null]
+  exit_date date
+  employment_status varchar(30) [not null]
+  employment_type varchar(30) [not null]
+  department_id varchar(10) [not null]
+  role_id varchar(10) [not null]
+  manager_id varchar(10)
+  work_location varchar(60) [not null]
+  work_mode varchar(20) [not null]
+  highest_education varchar(100) [not null]
+  prior_experience_years numeric(4,1) [not null]
+  career_gap_months int [not null]
+  commute_distance_km numeric(5,1) [not null]
+  pf_applicable varchar(1) [not null]
+  esi_applicable varchar(1) [not null]
+  notice_period_days int [not null]
+  resignation_date date
+  exit_type varchar(30)
+  exit_reason varchar(60)
+  is_active boolean [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Ref: roles.department_id > departments.department_id
+Ref: employees.department_id > departments.department_id
+Ref: employees.role_id > roles.role_id
+Ref: employees.manager_id > employees.employee_id
