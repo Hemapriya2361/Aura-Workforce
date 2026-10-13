@@ -85,12 +85,12 @@ Inside Docker the database host is the service name `db`, not `localhost`.
 app/
   main.py        app entry point and /health
   core/          settings (config.py) and database connection (database.py)
-  routes/        API endpoints (Task 3)
-  services/      business logic (Task 3)
-  models/        database tables (Task 2)
-  schemas/       request and response shapes (Task 3)
+  routes/        API endpoints
+  services/      business logic
+  models/        database tables
+  schemas/       request and response shapes
 alembic/         database migrations
 tests/           pytest tests
-scripts/         seed script (Task 4)
+scripts/         seed script
 docs/            API contract, sample data, ER diagram
 ```
