@@ -94,3 +94,13 @@ tests/           pytest tests
 scripts/         seed script
 docs/            API contract, sample data, ER diagram
 ```
+
+## Assumptions
+
+- Health endpoint is at /api/v1/health (base path /api/v1 from the guide).
+- Local database uses the Compose service name `db`.
+
+## Handoff package
+
+- [Draft API contract](docs/api-contract.md)
+- [Sample employees (10 records)](scripts/sample_employees.json)
