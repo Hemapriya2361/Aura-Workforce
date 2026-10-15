@@ -17,10 +17,11 @@ copy .env.example .env        # on Mac/Linux: cp .env.example .env
 docker compose up --build
 ```
 
-In a second terminal, build the tables:
+In a second terminal, build the tables and fill them with the master dataset:
 
 ```
 docker compose run --rm api alembic upgrade head
+docker compose run --rm api python -m scripts.seed --reset
 ```
 
 Then open:
@@ -45,7 +46,7 @@ uvicorn app.main:app --reload
 python -m pytest
 ```
 
-Tests use an in-memory SQLite database, so they need no Docker. They cover the models and every Task 3 endpoint, including bad input.
+Tests use an in-memory SQLite database, so they need no Docker. They cover the models, every Task 3 endpoint (including bad input) and the Task 4 seed and CSV export.
 
 ## Database (Task 2)
 
@@ -104,6 +105,33 @@ All paths start with `/api/v1`. The full list is in [docs/api-contract.md](docs/
 
 Codes: `VALIDATION_ERROR` (422), `NOT_FOUND` (404), `CONFLICT` (409), `INTERNAL_ERROR` (500). Stack traces are never shown.
 
+## Master dataset and seed (Task 4)
+
+**Data source:** `data/seed/01_LedgerForge_Python_Master_Dataset.xlsx`. Everything in it is fictional (company "Zenith Nova Technologies"). No Kaggle dataset is used.
+
+```
+docker compose run --rm api alembic upgrade head
+docker compose run --rm api python -m scripts.seed --reset     # fills the database
+docker compose run --rm api python -m scripts.export_csv       # CSV files in exports/
+```
+
+How the seed works:
+- `--reset` empties all tables first, then loads. Without it, the seed only adds rows that are missing, so running it twice never creates duplicates.
+- Employees are inserted in two passes. A manager can appear later in the sheet than the person who reports to them, so everyone is inserted first and `manager_id` is filled in second.
+- The Excel file is slow to read, so each sheet is converted to CSV once (`scripts/export_sheets.py`) into `data/seed/csv/`, which is not committed.
+- After loading, the seed prints a row-count table and checks (managers exist, no exit before hire, exit date matches status, 441 active, no placeholder data). It exits with an error if a check fails.
+- `--with-extra` adds 50 more employees made with Faker (`scripts/extra_fake.py`, fixed seed 2026, so everyone gets the same people). They are optional so that row counts equal the sheet.
+
+Row counts after `python -m scripts.seed --reset`:
+
+| Table | Sheet rows | Database rows |
+|---|---|---|
+| departments | 11 | 11 |
+| roles | 58 | 58 |
+| employees | 745 (441 active) | 745 (441 active) |
+
+**CSV exports** (`exports/`, one file per table): `employees.csv` (from the database), `salary_structures.csv` and `attendance.csv` (copied from the master dataset until Tasks 6 and 7 add those tables).
+
 ## Settings
 
 Settings are read from environment variables, or from a `.env` file. `.env` is not committed. Copy `.env.example` and change the values.
@@ -122,6 +150,10 @@ Inside Docker the database host is the service name `db`, not `localhost`.
 - Hire date cannot be after `DEMO_TODAY`.
 - Changing `employment_status` also updates `is_active` (Active means true, anything else false).
 - `/roles` endpoints are not built yet.
+- The seed loads only departments, roles and employees for now. Other tables get their loaders in the task that creates them.
+- The 50 Faker employees are optional (`--with-extra`), so that seeded row counts equal the sheet row counts.
+- The employees table has no phone column, so no phone numbers are generated.
+- `salary_structures.csv` and `attendance.csv` come from the master dataset until their tables exist.
 
 ## Folder structure
 
@@ -135,7 +167,9 @@ app/
   schemas/       request and response shapes
 alembic/         database migrations
 tests/           pytest tests
-scripts/         seed script
+scripts/         seed.py, extra_fake.py, export_sheets.py, export_csv.py
+data/seed/       master dataset workbook (csv/ is generated, not committed)
+exports/         CSV exports (generated, not committed)
 docs/            API contract, sample data, ER diagram
 ```
 
@@ -143,5 +177,7 @@ docs/            API contract, sample data, ER diagram
 
 - [Draft API contract](docs/api-contract.md)
 - [Sample employees (10 records)](scripts/sample_employees.json)
+
+- [Master dataset workbook](data/seed/01_LedgerForge_Python_Master_Dataset.xlsx)
 
 Tag: `handoff-day2`.
