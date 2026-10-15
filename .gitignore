@@ -3,3 +3,5 @@ auravenv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+data/seed/csv/
+exports/

@@ -6,3 +6,6 @@ httpx
 sqlalchemy
 alembic
 psycopg2-binary
+pandas
+openpyxl
+Faker==40.43.0
